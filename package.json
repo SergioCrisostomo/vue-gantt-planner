@@ -1,6 +1,12 @@
 {
   "name": "vue-gantt-planner",
-  "version": "0.1.0",
+  "version": "0.0.1",
+  "author": {
+    "name": "Sérgio Crisóstomo",
+    "email": "sergiosbox@gmail.com"
+  },
+  "description": "Gantt tool for project managing",
+  "main": "src/main.js",
   "private": true,
   "scripts": {
     "serve": "vue-cli-service serve",
