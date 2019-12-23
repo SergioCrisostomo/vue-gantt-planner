@@ -15,6 +15,21 @@ npm install
 npm run serve
 ```
 
+### Roadmap
+
+As I wrote above this is under development. The steps I know I want to add are:
+
+ - staff based view (currently default and only)
+ - project based view
+ - drag and drop between dates of same staff
+ - drag and drop between staff (and date)
+ - automatically assignement of projects
+ - project milestones 
+ - baselines (to save/import state) for future analysis 
+ - project metadata like:
+     - assignement percentage (staff engagement % in project)
+     - staff role
+
 ### Compiles and minifies for production
 ```
 npm run build
