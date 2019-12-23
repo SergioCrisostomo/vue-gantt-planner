@@ -1,11 +1,15 @@
 {
   "name": "vue-gantt-planner",
+  "description": "Gantt tool for project management",
   "version": "0.0.1",
   "author": {
     "name": "Sérgio Crisóstomo",
     "email": "sergiosbox@gmail.com"
   },
-  "description": "Gantt tool for project managing",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/SergioCrisostomo/vue-gantt-planner"
+  },
   "main": "src/main.js",
   "private": true,
   "scripts": {
