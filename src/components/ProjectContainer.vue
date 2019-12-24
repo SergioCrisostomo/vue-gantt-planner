@@ -21,13 +21,8 @@ export default {
   },
   computed: {
     length() {
-      const divider = this.markLength === "day" ? 864e5 : 864e5;
+      const divider = this.markLength === "day" ? 864e5 : 864e5; // todo add month and week
       const length = (this.end.getTime() - this.start.getTime()) / divider;
-      console.log(
-        this.end.getTime() - this.start.getTime(),
-        this.markLength,
-        length
-      );
       const pixelCorrection = length - 5;
       return `calc(${length} * 100% + ${pixelCorrection}px)`;
     },
