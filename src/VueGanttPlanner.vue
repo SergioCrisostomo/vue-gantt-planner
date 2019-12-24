@@ -25,7 +25,9 @@
               v-if="project && project.start.getTime() === mark.getTime()"
               v-bind="project"
               :mark-length="rangeUnit"
-              @reposition="onRepositionEvent(project, ...arguments)"
+              @reposition="
+                onRepositionEvent(project.id, person.id, ...arguments)
+              "
             ></project-container>
           </td>
         </tr>
@@ -58,13 +60,14 @@ export default {
   },
   computed: {
     projectsPerPerson() {
-      return this.staff.map(name => {
-        let projects = this.projects.filter(({ assignee }) =>
-          assignee.includes(name)
+      return this.staff.map(({ name, id }) => {
+        let projects = this.projects.filter(({ assignees }) =>
+          assignees.includes(name)
         );
         if (projects.length === 0) projects = [null];
         return {
           name,
+          id,
           projects
         };
       });
@@ -97,11 +100,14 @@ export default {
           this.hoveredRow.person === person && this.hoveredRow.i === i
       };
     },
-    onRepositionEvent(project, timeColumn, staffRow, final = false) {
-      const staff = this.staff[staffRow];
-      const startMark = this.timeMarks[timeColumn];
-      const id = project.id;
-      this.$emit("reposition-event", { id, staff, startMark, final });
+    onRepositionEvent(projectId, staffId, final, col, row) {
+      this.$emit("reposition-event", {
+        id: projectId,
+        newStaffId: this.staff[row].id,
+        currentStaffId: staffId,
+        startMark: this.timeMarks.marks[col],
+        final
+      });
     }
   },
   filters: {
@@ -128,7 +134,7 @@ export default {
   height: 22px;
 }
 .gantt-plan td {
-  min-width: 40px;
+  min-width: 60px;
   position: relative;
 }
 .gantt-plan tr th:first-child {

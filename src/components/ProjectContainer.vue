@@ -11,7 +11,7 @@
 <script>
 export default {
   name: "project",
-  props: ["id", "name", "start", "end", "assignee", "markLength", "color"], // TODO: add types
+  props: ["id", "name", "start", "end", "assignees", "markLength", "color"], // TODO: add types
   data() {
     return {
       x: 2,
@@ -58,7 +58,8 @@ export default {
       window.removeEventListener("mouseup", this.onPointerUp);
 
       if (e instanceof Event) {
-        this.$emit("reposition", JSON.parse(this.lastPosition), false);
+        const [col, row] = JSON.parse(this.lastPosition);
+        this.$emit("reposition", true, col, row);
       }
       this.lastPosition = "";
     },
@@ -66,17 +67,17 @@ export default {
       this.setDragPosition(e.clientX, e.clientY);
 
       // calculate nearest cell
-      const xy = ["x", "y"].map(type => {
+      const [col, row] = ["x", "y"].map(type => {
         let pos = Math.min(...this.tablePositions[type]);
         for (let value of this.tablePositions[type]) {
           if (value < this[type]) pos = value;
         }
         return this.tablePositions[type].indexOf(pos);
       });
-      const currentPosition = JSON.stringify(xy);
+      const currentPosition = JSON.stringify([col, row]);
       if (currentPosition !== this.lastPosition) {
         this.lastPosition = currentPosition;
-        this.$emit("reposition", ...xy, false);
+        this.$emit("reposition", false, col, row);
       }
     },
     calculateDropCellPositions() {
