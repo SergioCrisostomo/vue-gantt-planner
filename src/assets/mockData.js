@@ -6,40 +6,40 @@ const nextWeek = new Date(today.getTime() + oneDay * 7);
 
 export default {
   staff: [
-    "Joakim",
-    "Erik",
-    "Gunnar",
-    "Manikandan",
-    "Sergio",
-    "Jordy",
-    "Piroska",
-    "Nadia",
-    "Jens",
-    "Souranshu"
+    { name: "Joakim", id: "001" },
+    { name: "Erik", id: "002" },
+    { name: "Gunnar", id: "003" },
+    { name: "Manikandan", id: "004" },
+    { name: "Sergio", id: "005" },
+    { name: "Jordy", id: "006" },
+    { name: "Piroska", id: "007" },
+    { name: "Nadia", id: "008" },
+    { name: "Jens", id: "009" },
+    { name: "Souranshu", id: "010" }
   ],
   projects: [
     {
       id: "001",
-      name: "SOme project A",
+      name: "Proj A",
       start: today,
       end: nextWeek,
-      assignee: ["Joakim"],
+      assignees: ["Joakim"],
       color: "#ccf"
     },
     {
       id: "002",
-      name: "SOme project B",
+      name: "Proj B",
       start: yesterday,
       end: tomorrow,
-      assignee: ["Sergio", "Jordy"],
+      assignees: ["Sergio", "Jordy"],
       color: "#9dc"
     },
     {
       id: "003",
-      name: "Some project C",
+      name: "Proj C",
       start: yesterday,
       end: tomorrow,
-      assignee: ["Gunnar", "Joakim"],
+      assignees: ["Gunnar", "Joakim"],
       color: "#88e"
     }
   ],
