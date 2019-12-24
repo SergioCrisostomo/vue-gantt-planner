@@ -29,6 +29,7 @@
               :assignee="project.assignee"
               :mark-length="rangeUnit"
               :color="project.color"
+              @reposition="onRepositionEvent(project, ...arguments)"
             ></project-container>
           </td>
         </tr>
@@ -99,6 +100,9 @@ export default {
         "is-drag-target":
           this.hoveredRow.person === person && this.hoveredRow.i === i
       };
+    },
+    onRepositionEvent(project, x, y) {
+      console.log("onRepositionEvent", project, x, y);
     }
   },
   filters: {
