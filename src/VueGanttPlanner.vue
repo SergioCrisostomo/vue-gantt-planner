@@ -13,14 +13,16 @@
       <tbody v-for="person in projectsPerPerson" :key="person.name">
         <tr
           v-for="(project, i) in person.projects"
-          :key="project.id + i"
+          :key="person.name + '_' + i"
           @mouseenter="hoveredRow = { person, i }"
           :class="rowClasses(person, i)"
         >
-          <th>{{ i === 0 ? person.name : "&nbsp;" }}</th>
+          <th :rowspan="person.projects.length" v-if="i === 0">
+            {{ person.name }}
+          </th>
           <td v-for="mark in timeMarks.marks" :key="mark.getTime()">
             <project-container
-              v-if="project.start.getTime() === mark.getTime()"
+              v-if="project && project.start.getTime() === mark.getTime()"
               :id="project.id"
               :start="project.start"
               :end="project.end"
@@ -29,14 +31,6 @@
               :color="project.color"
             ></project-container>
           </td>
-        </tr>
-        <tr
-          v-if="person.projects.length === 0"
-          @mouseenter="hoveredRow = { person, i: null }"
-          :class="rowClasses(person)"
-        >
-          <th>{{ person.name }}</th>
-          <td v-for="mark in timeMarks.marks" :key="mark.getTime()"></td>
         </tr>
       </tbody>
     </table>
@@ -68,9 +62,10 @@ export default {
   computed: {
     projectsPerPerson() {
       return this.staff.map(name => {
-        const projects = this.projects.filter(({ assignee }) =>
+        let projects = this.projects.filter(({ assignee }) =>
           assignee.includes(name)
         );
+        if (projects.length === 0) projects = [null];
         return {
           name,
           projects
