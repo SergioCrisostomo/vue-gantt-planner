@@ -25,13 +25,14 @@ As I wrote above this is under development. The steps I know I want to add are:
  - drag and drop between dates of same staff row
  - drag and drop between staff (and date)
  - emit changes to parent component
- - automatically assignement of staff into projects
+ - re-arrange projects so they fits in minimal number of rows
+ - automatically assignment of staff into projects
  - i18n or a prop that can set terms in different languages
  - project milestones 
  - baselines (to save/import state) for future analysis 
  - add integration for project tools like Jira or Trello
  - project metadata like:
-     - assignement percentage (staff engagement % in project)
+     - assignment percentage (staff engagement % in project)
      - staff role
 
 ### Compiles and minifies for production
