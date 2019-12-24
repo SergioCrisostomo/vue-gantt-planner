@@ -4,14 +4,14 @@
     class="gantt-project-container"
     @mousedown="onPointerDown"
   >
-    <span>{{ id }}</span>
+    <span>{{ name }}</span>
   </div>
 </template>
 
 <script>
 export default {
   name: "project",
-  props: ["id", "start", "end", "assignee", "markLength", "color"], // TODO: add types
+  props: ["id", "name", "start", "end", "assignee", "markLength", "color"], // TODO: add types
   data() {
     return {
       x: 2,
@@ -53,9 +53,14 @@ export default {
       window.addEventListener("mousemove", this.onPointerMove);
       window.addEventListener("mouseup", this.onPointerUp);
     },
-    onPointerUp() {
+    onPointerUp(e) {
       window.removeEventListener("mousemove", this.onPointerMove);
       window.removeEventListener("mouseup", this.onPointerUp);
+
+      if (e instanceof Event) {
+        this.$emit("reposition", JSON.parse(this.lastPosition), false);
+      }
+      this.lastPosition = "";
     },
     onPointerMove(e) {
       this.setDragPosition(e.clientX, e.clientY);
@@ -71,7 +76,7 @@ export default {
       const currentPosition = JSON.stringify(xy);
       if (currentPosition !== this.lastPosition) {
         this.lastPosition = currentPosition;
-        this.$emit("reposition", ...xy);
+        this.$emit("reposition", ...xy, false);
       }
     },
     calculateDropCellPositions() {
@@ -90,6 +95,9 @@ export default {
         y: ySteps
       };
     }
+  },
+  beforeDestroy() {
+    this.onPointerUp();
   }
 };
 </script>

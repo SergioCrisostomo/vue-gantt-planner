@@ -19,21 +19,24 @@ export default {
   ],
   projects: [
     {
-      id: "A",
+      id: "001",
+      name: "SOme project A",
       start: today,
       end: nextWeek,
       assignee: ["Joakim"],
       color: "#ccf"
     },
     {
-      id: "B",
+      id: "002",
+      name: "SOme project B",
       start: yesterday,
       end: tomorrow,
       assignee: ["Sergio", "Jordy"],
       color: "#9dc"
     },
     {
-      id: "C",
+      id: "003",
+      name: "Some project C",
       start: yesterday,
       end: tomorrow,
       assignee: ["Gunnar", "Joakim"],

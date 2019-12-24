@@ -23,12 +23,8 @@
           <td v-for="mark in timeMarks.marks" :key="mark.getTime()">
             <project-container
               v-if="project && project.start.getTime() === mark.getTime()"
-              :id="project.id"
-              :start="project.start"
-              :end="project.end"
-              :assignee="project.assignee"
+              v-bind="project"
               :mark-length="rangeUnit"
-              :color="project.color"
               @reposition="onRepositionEvent(project, ...arguments)"
             ></project-container>
           </td>
@@ -101,8 +97,11 @@ export default {
           this.hoveredRow.person === person && this.hoveredRow.i === i
       };
     },
-    onRepositionEvent(project, x, y) {
-      console.log("onRepositionEvent", project, x, y);
+    onRepositionEvent(project, timeColumn, staffRow, final = false) {
+      const staff = this.staff[staffRow];
+      const startMark = this.timeMarks[timeColumn];
+      const id = project.id;
+      this.$emit("reposition-event", { id, staff, startMark, final });
     }
   },
   filters: {
