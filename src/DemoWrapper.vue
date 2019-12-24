@@ -16,6 +16,7 @@ export default {
   },
   methods: {
     onReposition({ id, newStaffId, currentStaffId, startMark, final }) {
+      if (!final) return;
       const project = this.mockData.projects.find(obj => obj.id === id);
 
       let { assignees, start, end } = project;
@@ -26,8 +27,8 @@ export default {
           ({ id }) => id === newStaffId
         );
         assignees = project.assignees
-          .filter(staff => staff.id !== currentStaffId)
-          .concat(newStaff);
+          .filter(id => id !== currentStaffId)
+          .concat(newStaff.id);
       }
       if (startMark.getTime() !== start.getTime()) {
         const diff = end.getTime() - start.getTime();
@@ -48,10 +49,6 @@ export default {
           prj.id === id ? updatedProject : prj
         )
       };
-
-      if (final) {
-        console.log("Drag has ended, we can save now...");
-      }
     }
   }
 };

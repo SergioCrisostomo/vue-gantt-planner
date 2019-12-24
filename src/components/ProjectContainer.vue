@@ -87,9 +87,9 @@ export default {
         .slice(1)
         .map(el => el.getBoundingClientRect().x - startPosition.x);
 
-      const ySteps = [...table.querySelectorAll("tbody")].map(tr => {
-        const th = tr.querySelector("th");
-        return th.getBoundingClientRect().y - startPosition.y;
+      const ySteps = [...table.querySelectorAll("tr")].slice(1).map(tr => {
+        const td = tr.querySelector("td");
+        return td.getBoundingClientRect().y - startPosition.y;
       });
       this.tablePositions = {
         x: xSteps,
@@ -99,6 +99,7 @@ export default {
   },
   beforeDestroy() {
     this.onPointerUp();
+    // console.log('destroying...');
   }
 };
 </script>

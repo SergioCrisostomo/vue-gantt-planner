@@ -12,16 +12,16 @@
       </thead>
       <tbody v-for="person in projectsPerPerson" :key="person.name">
         <tr
-          v-for="(project, i) in person.projects"
-          :key="person.name + '_' + i"
-          @mouseenter="hoveredRow = { person, i }"
-          :class="rowClasses(person, i)"
+          ref="tableRows"
+          v-for="(project, rowIndex) in person.projects"
+          :key="person.name + '_' + rowIndex"
         >
-          <th :rowspan="person.projects.length" v-if="i === 0">
+          <th :rowspan="person.projects.length" v-if="rowIndex === 0">
             {{ person.name }}
           </th>
           <td v-for="mark in timeMarks.marks" :key="mark.getTime()">
             <project-container
+              :key="project.id + '_' + person.name"
               v-if="project && project.start.getTime() === mark.getTime()"
               v-bind="project"
               :mark-length="rangeUnit"
@@ -55,14 +55,15 @@ export default {
     return {
       projectIssues: [],
       incrementType: "day",
-      hoveredRow: {}
+      dragTarget: {}
     };
   },
   computed: {
     projectsPerPerson() {
-      return this.staff.map(({ name, id }) => {
+      return this.staff.map(staff => {
+        const { name, id } = staff;
         let projects = this.projects.filter(({ assignees }) =>
-          assignees.includes(name)
+          assignees.includes(id)
         );
         if (projects.length === 0) projects = [null];
         return {
@@ -94,19 +95,35 @@ export default {
     }
   },
   methods: {
-    rowClasses(person, i = null) {
-      return {
-        "is-drag-target":
-          this.hoveredRow.person === person && this.hoveredRow.i === i
-      };
-    },
     onRepositionEvent(projectId, staffId, final, col, row) {
+      this.dragTarget = { col, row };
+      let newStaffId = (() => {
+        let counter = 0;
+        for (let person of this.projectsPerPerson) {
+          for (let i = 0; i < person.projects.length; i++) {
+            if (counter === row) {
+              return person.id;
+            } else {
+              counter++;
+            }
+          }
+        }
+      })();
       this.$emit("reposition-event", {
         id: projectId,
-        newStaffId: this.staff[row].id,
+        newStaffId,
         currentStaffId: staffId,
         startMark: this.timeMarks.marks[col],
         final
+      });
+
+      // toggle classes
+      this.$refs.tableRows.forEach((tr, r) => {
+        const tds = [...tr.querySelectorAll("td")];
+        tds.forEach((td, c) => {
+          const isSelectedCell = col === c && row === r;
+          td.classList.toggle("is-drag-target", isSelectedCell);
+        });
       });
     }
   },
@@ -125,7 +142,7 @@ export default {
   border-collapse: collapse;
   border: 1px solid black;
 }
-.gantt-plan tr.is-drag-target {
+.gantt-plan td.is-drag-target {
   background-color: #b2c9ee;
 }
 .gantt-plan th,
