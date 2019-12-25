@@ -14,32 +14,49 @@ export default {
     "end",
     "assignees",
     "markLength",
-    "projectColor"
+    "projectColor",
+    "staff",
+    "staffTaskIndex"
   ], // TODO: add types
   data() {
     return {
       x: 2,
       y: 2,
+      height: 0,
+      width: 0,
       pointerDownOffset: { x: 0, y: 0 },
       tablePositions: [],
       lastPosition: ""
     };
   },
   computed: {
-    length() {
-      const divider = this.markLength === "day" ? 864e5 : 864e5; // todo add month and week
-      const length = (this.end.getTime() - this.start.getTime()) / divider;
-      const pixelCorrection = length - 5;
-      return length * 60 + pixelCorrection + "px";
-    },
     styles() {
       return {
-        width: this.length,
+        width: this.width + "px",
+        height: this.height + "px",
         backgroundColor: this.projectColor,
-        left: this.x + "px",
-        top: this.y + "px"
+        left: this.x + 2 + "px",
+        top: this.y + 2 + "px"
       };
     }
+  },
+  mounted() {
+    const rowSelector = `tr[data-staff="${this.staff.id}"]`;
+    const row = document.querySelectorAll(rowSelector)[this.staffTaskIndex];
+
+    const startTd = row.querySelector(
+      `td[data-time-mark="${this.start.getTime()}"]`
+    );
+    const endTd = row.querySelector(
+      `td[data-time-mark="${this.end.getTime()}"]`
+    );
+
+    const startCoords = startTd.getBoundingClientRect();
+    const endCoords = endTd.getBoundingClientRect();
+    this.x = startCoords.x;
+    this.y = startCoords.y;
+    this.height = startCoords.height - 3;
+    this.width = endCoords.width + endCoords.x - startCoords.x - 3;
   }
 };
 </script>
@@ -48,7 +65,7 @@ export default {
 .gantt-task-container {
   position: absolute;
   background-color: #ccf;
-  height: 20px;
+  height: 19px;
   border-radius: 3px;
   z-index: 1;
   user-select: none;

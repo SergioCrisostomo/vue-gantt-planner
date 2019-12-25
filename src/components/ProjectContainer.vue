@@ -13,7 +13,7 @@ export default {
     length() {
       const divider = this.markLength === "day" ? 864e5 : 864e5; // todo add month and week
       const length = (this.end.getTime() - this.start.getTime()) / divider;
-      const pixelCorrection = length - 5;
+      const pixelCorrection = length;
       return `calc(${length} * 100% + ${pixelCorrection}px)`;
     },
     styles() {
@@ -35,7 +35,7 @@ export default {
   z-index: 1;
   user-select: none;
   left: 2px;
-  top: 2px;
+  top: 1px;
 }
 .gantt-project-container span {
   margin-left: 5px;

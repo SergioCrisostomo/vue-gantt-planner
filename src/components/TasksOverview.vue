@@ -8,6 +8,8 @@
             :key="person.id + '_' + i"
             v-bind="task"
             :mark-length="rangeUnit"
+            :staff="person"
+            :staff-task-index="i"
           ></task-container
         ></template>
       </template>
@@ -16,7 +18,7 @@
       <thead>
         <tr>
           <th>{{ staffLabel }}</th>
-          <th v-for="mark in timeMarks.marks" :key="mark.getTime()">
+          <th v-for="mark in timeMarks.marks" :key="mark">
             {{ mark | formatDate }}
           </th>
         </tr>
@@ -25,12 +27,16 @@
         <tr
           v-for="(task, rowIndex) in person.tasks"
           :key="person.id + '_' + rowIndex"
-          :index="rowIndex"
+          :data-staff="person.id"
         >
           <th :rowspan="person.tasks.length" v-if="rowIndex === 0">
             {{ person.name }}
           </th>
-          <td v-for="mark in timeMarks.marks" :key="mark.getTime()"></td>
+          <td
+            v-for="mark in timeMarks.marks"
+            :key="mark"
+            :data-time-mark="mark"
+          ></td>
         </tr>
       </tbody>
     </table>
@@ -50,18 +56,10 @@ export default {
     };
   },
   computed: {},
-  methods: {
-    checkPlacement(project, staffId, mark) {
-      if (!project) return false;
-      const staffInfo = project.assignees.find(staff => {
-        return staff.id === staffId;
-      });
-      let comparator = staffInfo.start && staffInfo.end ? staffInfo : project;
-      return comparator.start.getTime() === mark.getTime();
-    }
-  },
+  methods: {},
   filters: {
     formatDate(date) {
+      if (typeof date === "number") date = new Date(date);
       return [date.getDate(), date.getMonth() + 1]
         .map(nr => (nr > 9 ? nr : "0" + nr))
         .join("/");

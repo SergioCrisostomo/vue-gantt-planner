@@ -1,12 +1,13 @@
 const oneDay = 864e5;
 const today = new Date();
+today.setHours(0);
 const tomorrow = new Date(today.getTime() + oneDay);
 const yesterday = new Date(today.getTime() - oneDay);
 const nextWeek = new Date(today.getTime() + oneDay * 7);
 
-const BACK_END = "BackEnd";
-const PM = "Product Manager";
-const FE = "FrontEnd";
+const BACK_END = "BE";
+const PM = "PM";
+const FE = "FE";
 
 export default {
   staff: [
@@ -40,8 +41,6 @@ export default {
     {
       id: "P002",
       name: "Proj B",
-      start: yesterday,
-      end: tomorrow,
       tasks: [
         {
           id: "T002",
@@ -65,23 +64,21 @@ export default {
     {
       id: "P003",
       name: "Proj C",
-      start: yesterday,
-      end: tomorrow,
       tasks: [
         {
           id: "T004",
           assignee: "S001",
           type: BACK_END,
           start: yesterday,
-          end: today,
+          end: tomorrow,
           engagement: 50
         },
         {
           id: "T005",
           assignee: "S008",
-          type: "FrontEnd",
+          type: FE,
           start: today,
-          end: tomorrow,
+          end: today,
           engagement: 50
         },
         {
@@ -97,8 +94,8 @@ export default {
     }
   ],
   title: "Vue Gantt Planner",
-  startRange: yesterday,
-  endRange: nextWeek,
+  startRange: new Date(yesterday.getTime() - oneDay),
+  endRange: new Date(nextWeek.getTime() + oneDay),
   rangeUnit: "day",
   staffLabel: "Developer"
 };

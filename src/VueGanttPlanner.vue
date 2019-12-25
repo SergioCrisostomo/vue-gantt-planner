@@ -67,10 +67,10 @@ export default {
         type: increment,
         marks: (() => {
           let start = this.startRange;
-          const end = this.endRange;
+          const end = this.endRange.getTime();
           const marks = [];
-          while (start < end) {
-            marks.push(start);
+          while (start.getTime() < end) {
+            marks.push(start.getTime());
             if (this.rangeUnit === "day") {
               start.setDate(start.getDate() + 1);
             }
@@ -83,51 +83,8 @@ export default {
     }
   },
   methods: {
-    onRepositionEvent(projectId, staffId, final, col, row) {
-      this.dragTarget = { col, row };
-      let newStaffId = (() => {
-        let counter = 0;
-        for (let person of this.projectsPerPerson) {
-          for (let i = 0; i < person.projects.length; i++) {
-            if (counter === row) {
-              return person.id;
-            } else {
-              counter++;
-            }
-          }
-        }
-      })();
-      this.$emit("reposition-event", {
-        id: projectId,
-        newStaffId,
-        currentStaffId: staffId,
-        startMark: this.timeMarks.marks[col],
-        final
-      });
-
-      // toggle classes
-      this.$refs.tableRows.forEach((tr, r) => {
-        const tds = [...tr.querySelectorAll("td")];
-        tds.forEach((td, c) => {
-          const isSelectedCell = col === c && row === r;
-          td.classList.toggle("is-drag-target", isSelectedCell);
-        });
-      });
-    },
-    checkPlacement(project, staffId, mark) {
-      if (!project) return false;
-      const staffInfo = project.assignees.find(staff => {
-        return staff.id === staffId;
-      });
-      let comparator = staffInfo.start && staffInfo.end ? staffInfo : project;
-      return comparator.start.getTime() === mark.getTime();
-    }
-  },
-  filters: {
-    formatDate(date) {
-      return [date.getDate(), date.getMonth() + 1]
-        .map(nr => (nr > 9 ? nr : "0" + nr))
-        .join("/");
+    onRepositionEvent() {
+      this.$emit("reposition-event");
     }
   }
 };
@@ -137,6 +94,7 @@ export default {
 .gantt-plan table {
   border-collapse: collapse;
   border: 1px solid black;
+  table-layout: fixed;
 }
 .gantt-plan td.is-drag-target {
   background-color: #b2c9ee;
@@ -146,6 +104,8 @@ export default {
   border: 1px solid black;
   height: 22px;
   width: 60px;
+  padding: 0;
+  max-width: 60px;
 }
 .gantt-plan td {
   position: relative;

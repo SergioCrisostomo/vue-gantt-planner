@@ -4,9 +4,9 @@
     <table>
       <tr v-for="project in projectsAndRanges" :key="project.data.id">
         <th>{{ project.data.name }}</th>
-        <td v-for="mark in timeMarks.marks" :key="mark.getTime()">
+        <td v-for="mark in timeMarks.marks" :key="mark">
           <project-container
-            v-if="mark.getTime() === project.start.getTime()"
+            v-if="mark === project.start.getTime()"
             v-bind="project.data"
             :start="project.start"
             :end="project.end"

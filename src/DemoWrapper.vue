@@ -14,43 +14,7 @@ export default {
   data() {
     return { mockData };
   },
-  methods: {
-    onReposition({ id, newStaffId, currentStaffId, startMark, final }) {
-      if (!final) return;
-      const project = this.mockData.projects.find(obj => obj.id === id);
-
-      let { assignees, start, end } = project;
-
-      if (newStaffId !== currentStaffId) {
-        // remove old assignee, add new assignee
-        const newStaff = this.mockData.staff.find(
-          ({ id }) => id === newStaffId
-        );
-        assignees = project.assignees
-          .filter(assignee => assignee.id !== currentStaffId)
-          .concat({ id: newStaff.id });
-      }
-      if (startMark.getTime() !== start.getTime()) {
-        const diff = end.getTime() - start.getTime();
-        start = new Date(startMark.getTime());
-        end = new Date(start.getTime() + diff);
-      }
-
-      const updatedProject = {
-        ...project,
-        assignees,
-        start,
-        end
-      };
-
-      this.mockData = {
-        ...mockData,
-        projects: this.mockData.projects.map(prj =>
-          prj.id === id ? updatedProject : prj
-        )
-      };
-    }
-  }
+  methods: { onReposition() {} }
 };
 </script>
 
