@@ -1,17 +1,28 @@
 <template>
   <div>
     <h2>Project overview</h2>
+    <div>
+      <template v-for="project in projectsAndRanges">
+        <project-container
+          :key="project.data.id"
+          v-bind="project.data"
+          :start="project.start"
+          :end="project.end"
+        ></project-container>
+      </template>
+    </div>
     <table>
-      <tr v-for="project in projectsAndRanges" :key="project.data.id">
+      <tr
+        v-for="project in projectsAndRanges"
+        :key="project.data.id"
+        :data-project="project.data.id"
+      >
         <th>{{ project.data.name }}</th>
-        <td v-for="mark in timeMarks.marks" :key="mark">
-          <project-container
-            v-if="mark === project.start.getTime()"
-            v-bind="project.data"
-            :start="project.start"
-            :end="project.end"
-          ></project-container>
-        </td>
+        <td
+          v-for="mark in timeMarks.marks"
+          :key="mark"
+          :data-time-mark="mark"
+        ></td>
       </tr>
     </table>
   </div>
