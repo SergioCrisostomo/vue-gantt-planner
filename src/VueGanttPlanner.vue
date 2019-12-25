@@ -1,47 +1,26 @@
 <template>
   <div class="gantt-plan">
-    <h2>{{ title }}</h2>
-    <table>
-      <thead>
-        <tr>
-          <th>{{ label }}</th>
-          <th v-for="mark in timeMarks.marks" :key="mark.getTime()">
-            {{ mark | formatDate }}
-          </th>
-        </tr>
-      </thead>
-      <tbody v-for="person in projectsPerPerson" :key="person.name">
-        <tr
-          ref="tableRows"
-          v-for="(project, rowIndex) in person.projects"
-          :key="person.name + '_' + rowIndex"
-        >
-          <th :rowspan="person.projects.length" v-if="rowIndex === 0">
-            {{ person.name }}
-          </th>
-          <td v-for="mark in timeMarks.marks" :key="mark.getTime()">
-            <project-container
-              :key="project.id + '_' + person.name"
-              v-if="project && project.start.getTime() === mark.getTime()"
-              v-bind="project"
-              :mark-length="rangeUnit"
-              @reposition="
-                onRepositionEvent(project.id, person.id, ...arguments)
-              "
-            ></project-container>
-          </td>
-        </tr>
-      </tbody>
-    </table>
+    <tasks-overview
+      v-if="false"
+      :projects-per-person="projectsPerPerson"
+      :timeMarks="timeMarks"
+    ></tasks-overview>
+    <project-overview
+      :projects="projects"
+      :timeMarks="timeMarks"
+      :label="label"
+      :range-unit="rangeUnit"
+    ></project-overview>
   </div>
 </template>
 
 <script>
-import ProjectContainer from "./components/ProjectContainer.vue";
+import ProjectOverview from "./components/ProjectOverview";
+import TasksOverview from "./components/TasksOverview.vue";
 
 export default {
   name: "VueGanttPlanner",
-  components: { ProjectContainer },
+  components: { ProjectOverview, TasksOverview },
   props: [
     "title",
     "startRange",
@@ -63,7 +42,7 @@ export default {
       return this.staff.map(staff => {
         const { name, id } = staff;
         let projects = this.projects.filter(({ assignees }) =>
-          assignees.find((assignee) => assignee.id === id)
+          assignees.find(assignee => assignee.id === id)
         );
         if (projects.length === 0) projects = [null];
         return {
@@ -125,6 +104,14 @@ export default {
           td.classList.toggle("is-drag-target", isSelectedCell);
         });
       });
+    },
+    checkPlacement(project, staffId, mark) {
+      if (!project) return false;
+      const staffInfo = project.assignees.find(staff => {
+        return staff.id === staffId;
+      });
+      let comparator = staffInfo.start && staffInfo.end ? staffInfo : project;
+      return comparator.start.getTime() === mark.getTime();
     }
   },
   filters: {
@@ -137,7 +124,7 @@ export default {
 };
 </script>
 
-<style scoped>
+<style>
 .gantt-plan table {
   border-collapse: collapse;
   border: 1px solid black;
