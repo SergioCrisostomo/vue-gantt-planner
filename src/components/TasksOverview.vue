@@ -1,31 +1,36 @@
 <template>
   <div>
+    <div>
+      <template v-for="person in tasksPerPerson">
+        <template v-for="(task, i) in person.tasks"
+          ><task-container
+            v-if="task"
+            :key="person.id + '_' + i"
+            v-bind="task"
+            :mark-length="rangeUnit"
+          ></task-container
+        ></template>
+      </template>
+    </div>
     <table>
       <thead>
         <tr>
-          <th>{{ label }}</th>
+          <th>{{ staffLabel }}</th>
           <th v-for="mark in timeMarks.marks" :key="mark.getTime()">
             {{ mark | formatDate }}
           </th>
         </tr>
       </thead>
-      <tbody v-for="person in projectsPerPerson" :key="person.name">
+      <tbody v-for="person in tasksPerPerson" :key="person.name">
         <tr
-          ref="tableRows"
-          v-for="(project, rowIndex) in person.projects"
-          :key="person.name + '_' + rowIndex"
+          v-for="(task, rowIndex) in person.tasks"
+          :key="person.id + '_' + rowIndex"
+          :index="rowIndex"
         >
-          <th :rowspan="person.projects.length" v-if="rowIndex === 0">
+          <th :rowspan="person.tasks.length" v-if="rowIndex === 0">
             {{ person.name }}
           </th>
-          <td v-for="mark in timeMarks.marks" :key="mark.getTime()">
-            <task-container
-              :key="project.id + '_' + person.name"
-              v-if="checkPlacement(project, person.id, mark)"
-              v-bind="project"
-              :mark-length="rangeUnit"
-            ></task-container>
-          </td>
+          <td v-for="mark in timeMarks.marks" :key="mark.getTime()"></td>
         </tr>
       </tbody>
     </table>
@@ -38,7 +43,7 @@ import TaskContainer from "./TaskContainer.vue";
 export default {
   name: "TasksOverview",
   components: { TaskContainer },
-  props: ["projectsPerPerson", "timeMarks", "label", "rangeUnit"], // TODO: add types and validators
+  props: ["tasksPerPerson", "timeMarks", "staffLabel", "rangeUnit"], // TODO: add types and validators
   data() {
     return {
       dragTarget: {}
@@ -46,37 +51,6 @@ export default {
   },
   computed: {},
   methods: {
-    onRepositionEvent(projectId, staffId, final, col, row) {
-      this.dragTarget = { col, row };
-      let newStaffId = (() => {
-        let counter = 0;
-        for (let person of this.projectsPerPerson) {
-          for (let i = 0; i < person.projects.length; i++) {
-            if (counter === row) {
-              return person.id;
-            } else {
-              counter++;
-            }
-          }
-        }
-      })();
-      this.$emit("reposition-event", {
-        id: projectId,
-        newStaffId,
-        currentStaffId: staffId,
-        startMark: this.timeMarks.marks[col],
-        final
-      });
-
-      // toggle classes
-      this.$refs.tableRows.forEach((tr, r) => {
-        const tds = [...tr.querySelectorAll("td")];
-        tds.forEach((td, c) => {
-          const isSelectedCell = col === c && row === r;
-          td.classList.toggle("is-drag-target", isSelectedCell);
-        });
-      });
-    },
     checkPlacement(project, staffId, mark) {
       if (!project) return false;
       const staffInfo = project.assignees.find(staff => {
@@ -96,4 +70,4 @@ export default {
 };
 </script>
 
-<style scoped></style>
+<style></style>

@@ -10,16 +10,16 @@ const FE = "FrontEnd";
 
 export default {
   staff: [
-    { name: "Joakim", id: "001", roleTypes: [BACK_END, PM, FE] },
-    { name: "Erik", id: "002", roleTypes: [BACK_END, FE] },
-    { name: "Gunnar", id: "003", roleTypes: [BACK_END, FE] },
-    { name: "Manikandan", id: "004", roleTypes: [BACK_END, PM, FE] },
-    { name: "Sergio", id: "005", roleTypes: [FE, PM] },
-    { name: "Jordy", id: "006", roleTypes: [FE, PM] },
-    { name: "Piroska", id: "007", roleTypes: [FE, PM] },
-    { name: "Nadia", id: "008", roleTypes: [FE, PM] },
-    { name: "Jens", id: "009", roleTypes: [BACK_END, PM, FE] },
-    { name: "Souranshu", id: "010", roleTypes: [BACK_END, PM] }
+    { name: "Joakim", id: "S001", roleTypes: [BACK_END, PM, FE] },
+    { name: "Erik", id: "S002", roleTypes: [BACK_END, FE] },
+    { name: "Gunnar", id: "S003", roleTypes: [BACK_END, FE] },
+    { name: "Manikandan", id: "S004", roleTypes: [BACK_END, PM, FE] },
+    { name: "Sergio", id: "S005", roleTypes: [FE, PM] },
+    { name: "Jordy", id: "S006", roleTypes: [FE, PM] },
+    { name: "Piroska", id: "S007", roleTypes: [FE, PM] },
+    { name: "Nadia", id: "S008", roleTypes: [FE, PM] },
+    { name: "Jens", id: "S009", roleTypes: [BACK_END, PM, FE] },
+    { name: "Souranshu", id: "S010", roleTypes: [BACK_END, PM] }
   ],
   projects: [
     {
@@ -28,7 +28,7 @@ export default {
       tasks: [
         {
           id: "T001",
-          assignee: "A001",
+          assignee: "S001",
           type: PM,
           start: today,
           end: nextWeek,
@@ -45,7 +45,7 @@ export default {
       tasks: [
         {
           id: "T002",
-          assignee: "A005",
+          assignee: "S005",
           type: PM,
           start: yesterday,
           end: tomorrow,
@@ -53,7 +53,7 @@ export default {
         },
         {
           id: "T003",
-          assignee: "A004",
+          assignee: "S004",
           type: BACK_END,
           start: today,
           end: tomorrow,
@@ -70,7 +70,7 @@ export default {
       tasks: [
         {
           id: "T004",
-          assignee: "A001",
+          assignee: "S001",
           type: BACK_END,
           start: yesterday,
           end: today,
@@ -78,7 +78,7 @@ export default {
         },
         {
           id: "T005",
-          assignee: "A008",
+          assignee: "S008",
           type: "FrontEnd",
           start: today,
           end: tomorrow,
@@ -86,7 +86,7 @@ export default {
         },
         {
           id: "T006",
-          assignee: "A007",
+          assignee: "S007",
           type: PM,
           start: yesterday,
           end: tomorrow,
@@ -100,5 +100,5 @@ export default {
   startRange: yesterday,
   endRange: nextWeek,
   rangeUnit: "day",
-  label: "Developer"
+  staffLabel: "Developer"
 };

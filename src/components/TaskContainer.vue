@@ -1,13 +1,21 @@
 <template>
   <div :style="styles" class="gantt-task-container" @mousedown="onPointerDown">
-    <span>{{ name }}</span>
+    <span>{{ type }}</span>
   </div>
 </template>
 
 <script>
 export default {
   name: "TaskContainer",
-  props: ["id", "name", "start", "end", "assignees", "markLength", "color"], // TODO: add types
+  props: [
+    "id",
+    "type",
+    "start",
+    "end",
+    "assignees",
+    "markLength",
+    "projectColor"
+  ], // TODO: add types
   data() {
     return {
       x: 2,
@@ -19,15 +27,16 @@ export default {
   },
   computed: {
     length() {
+      console.log(this.start, this.end, this.id, this.name);
       const divider = this.markLength === "day" ? 864e5 : 864e5; // todo add month and week
       const length = (this.end.getTime() - this.start.getTime()) / divider;
       const pixelCorrection = length - 5;
-      return `calc(${length} * 100% + ${pixelCorrection}px)`;
+      return length * 60 + pixelCorrection + "px";
     },
     styles() {
       return {
         width: this.length,
-        backgroundColor: this.color,
+        backgroundColor: this.projectColor,
         left: this.x + "px",
         top: this.y + "px"
       };

@@ -1,14 +1,13 @@
 <template>
   <div class="gantt-plan">
     <tasks-overview
-      v-if="false"
-      :projects-per-person="projectsPerPerson"
+      :tasks-per-person="tasksPerPerson"
       :timeMarks="timeMarks"
+      :staffLabel="staffLabel"
     ></tasks-overview>
     <project-overview
       :projects="projects"
       :timeMarks="timeMarks"
-      :label="label"
       :range-unit="rangeUnit"
     ></project-overview>
   </div>
@@ -26,7 +25,7 @@ export default {
     "startRange",
     "endRange",
     "rangeUnit",
-    "label",
+    "staffLabel",
     "staff",
     "projects"
   ], // TODO: add types and validators
@@ -38,17 +37,27 @@ export default {
     };
   },
   computed: {
-    projectsPerPerson() {
+    tasksPerPerson() {
       return this.staff.map(staff => {
         const { name, id } = staff;
-        let projects = this.projects.filter(({ assignees }) =>
-          assignees.find(assignee => assignee.id === id)
-        );
-        if (projects.length === 0) projects = [null];
+        let tasks = this.projects.reduce((tasks, proj) => {
+          return [
+            ...tasks,
+            ...proj.tasks
+              .filter(task => task.assignee === id)
+              .map(task => {
+                return {
+                  ...task,
+                  projectColor: proj.color
+                };
+              })
+          ];
+        }, []);
+        if (tasks.length === 0) tasks = [null];
         return {
           name,
           id,
-          projects
+          tasks
         };
       });
     },
@@ -136,12 +145,13 @@ export default {
 .gantt-plan td {
   border: 1px solid black;
   height: 22px;
+  width: 60px;
 }
 .gantt-plan td {
-  min-width: 60px;
   position: relative;
 }
 .gantt-plan tr th:first-child {
   padding: 0 2px;
+  width: 100px;
 }
 </style>

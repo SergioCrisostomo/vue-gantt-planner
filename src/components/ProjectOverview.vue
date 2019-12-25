@@ -22,7 +22,7 @@ import ProjectContainer from "./ProjectContainer";
 export default {
   name: "ProjectOverview",
   components: { ProjectContainer },
-  props: ["projects", "timeMarks", "label", "rangeUnit"],
+  props: ["projects", "timeMarks", "rangeUnit"],
   computed: {
     projectsAndRanges() {
       return this.projects.map(proj => {
