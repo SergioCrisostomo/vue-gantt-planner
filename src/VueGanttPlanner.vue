@@ -63,7 +63,7 @@ export default {
       return this.staff.map(staff => {
         const { name, id } = staff;
         let projects = this.projects.filter(({ assignees }) =>
-          assignees.includes(id)
+          assignees.find((assignee) => assignee.id === id)
         );
         if (projects.length === 0) projects = [null];
         return {

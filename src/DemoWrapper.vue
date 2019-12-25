@@ -27,8 +27,8 @@ export default {
           ({ id }) => id === newStaffId
         );
         assignees = project.assignees
-          .filter(id => id !== currentStaffId)
-          .concat(newStaff.id);
+          .filter(assignee => assignee.id !== currentStaffId)
+          .concat({id: newStaff.id});
       }
       if (startMark.getTime() !== start.getTime()) {
         const diff = end.getTime() - start.getTime();

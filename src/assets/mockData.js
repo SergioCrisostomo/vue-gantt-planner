@@ -23,7 +23,7 @@ export default {
       name: "Proj A",
       start: today,
       end: nextWeek,
-      assignees: ["001"],
+      assignees: [{ id: "001" }],
       color: "#ccf"
     },
     {
@@ -31,7 +31,7 @@ export default {
       name: "Proj B",
       start: yesterday,
       end: tomorrow,
-      assignees: ["005", "006"],
+      assignees: [{ id: "005" }, { id: "006" }],
       color: "#9dc"
     },
     {
@@ -39,7 +39,7 @@ export default {
       name: "Proj C",
       start: yesterday,
       end: tomorrow,
-      assignees: ["003", "001", "008"],
+      assignees: [{ id: "003" }, { id: "001" }, { id: "008" }],
       color: "#88e"
     }
   ],
