@@ -5,11 +5,12 @@
         <template v-for="(task, i) in person.tasks"
           ><task-container
             v-if="task"
-            :key="person.id + '_' + i"
+            :key="task.id"
             v-bind="task"
             :mark-length="rangeUnit"
             :staff="person"
             :staff-task-index="i"
+            @reposition="onReposition(task, ...arguments)"
           ></task-container
         ></template>
       </template>
@@ -56,7 +57,19 @@ export default {
     };
   },
   computed: {},
-  methods: {},
+  methods: {
+    onReposition(task, { col, row, moveEnd }) {
+      const timeDiff = this.timeMarks.marks[col] - task.start.getTime();
+
+      this.$emit("task-reposition", {
+        projectId: task.projectId,
+        taskId: task.id,
+        diff: timeDiff,
+        staffId: this.tasksPerPerson[row].id,
+        moveEnd
+      });
+    }
+  },
   filters: {
     formatDate(date) {
       if (typeof date === "number") date = new Date(date);

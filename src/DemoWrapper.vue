@@ -16,10 +16,12 @@ export default {
   },
   methods: {
     onReposition(type, projects) {
-      this.mockData = {
+      const newData = {
         ...this.mockData,
         projects: projects
       };
+
+      this.mockData = newData;
     }
   }
 };

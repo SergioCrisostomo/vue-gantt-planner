@@ -1,7 +1,7 @@
 {
   "name": "vue-gantt-planner",
   "description": "Gantt tool for project management",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "author": {
     "name": "Sérgio Crisóstomo",
     "email": "sergiosbox@gmail.com"

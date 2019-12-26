@@ -1,5 +1,5 @@
 <template>
-  <div :style="styles" class="gantt-task-container">
+  <div :style="styles" class="gantt-task-container" @mousedown="onPointerDown">
     <span>{{ type }}</span>
   </div>
 </template>
@@ -41,10 +41,67 @@ export default {
     }
   },
   methods: {
+    onPointerDown(e) {
+      this.pointerDownOffset = {
+        x: e.clientX,
+        y: e.clientY
+      };
+      this.calculateCellPositions();
+      window.addEventListener("mousemove", this.onPointerMove);
+      window.addEventListener("mouseup", this.onPointerUp);
+    },
+    onPointerUp(e) {
+      window.removeEventListener("mousemove", this.onPointerMove);
+      window.removeEventListener("mouseup", this.onPointerUp);
+      if (e instanceof Event && this.lastPosition) {
+        const [col, row] = JSON.parse(this.lastPosition);
+        this.$emit("reposition", { col, row, moveEnd: true });
+      }
+      this.lastPosition = "";
+    },
+    onPointerMove(e) {
+      const pointerCoords = {
+        x: e.clientX - this.pointerDownOffset.x,
+        y: e.clientY - this.pointerDownOffset.y
+      };
+      // calculate nearest cell
+      const [col, row] = ["x", "y"].map(type => {
+        let pos = Math.min(...this.tablePositions[type]);
+        for (let value of this.tablePositions[type]) {
+          if (value < pointerCoords[type] - 10) pos = value;
+        }
+        return this.tablePositions[type].indexOf(pos);
+      });
+
+      const currentPosition = JSON.stringify([col, row]);
+      if (currentPosition !== this.lastPosition) {
+        this.lastPosition = currentPosition;
+        this.$emit("reposition", {
+          col,
+          row,
+          moveEnd: false
+        });
+      }
+    },
+    calculateCellPositions() {
+      const startPosition = this.$el.getBoundingClientRect();
+      const table = document.querySelector('table[data-type="tasks"]');
+      const xSteps = [...table.querySelector("tr").querySelectorAll("th")].map(
+        el => el.getBoundingClientRect().x - startPosition.x
+      );
+      const ySteps = [...table.querySelectorAll("tr")].slice(1).map(tr => {
+        const td = tr.querySelector("td");
+        return td.getBoundingClientRect().y - startPosition.y;
+      });
+      this.tablePositions = {
+        x: xSteps,
+        y: ySteps
+      };
+      console.log(JSON.stringify(this.tablePositions));
+    },
     setContainerPosition() {
       const rowSelector = `table[data-type="tasks"] tr[data-staff="${this.staff.id}"]`;
       const row = document.querySelectorAll(rowSelector)[this.staffTaskIndex];
-
       const startTd = row.querySelector(
         `td[data-time-mark="${this.start.getTime()}"]`
       );

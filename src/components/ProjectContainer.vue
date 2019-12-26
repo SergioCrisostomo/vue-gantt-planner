@@ -11,7 +11,7 @@
 <script>
 export default {
   name: "ProjectContainer",
-  props: ["id", "name", "tasks", "markLength", "color", "start", "end"], // TODO: add types
+  props: ["id", "name", "markLength", "color", "start", "end"], // TODO: add types
   data() {
     return {
       x: 0,
@@ -19,7 +19,8 @@ export default {
       height: 0,
       width: 0,
       pointerDownOffset: { x: 0, y: 0 },
-      tablePositions: {}
+      tablePositions: [],
+      lastPosition: ""
     };
   },
   computed: {

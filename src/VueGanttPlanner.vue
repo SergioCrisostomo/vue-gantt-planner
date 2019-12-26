@@ -4,6 +4,7 @@
       :tasks-per-person="tasksPerPerson"
       :timeMarks="timeMarks"
       :staffLabel="staffLabel"
+      @task-reposition="onTaskReposition"
     ></tasks-overview>
     <project-overview
       :projects="projects"
@@ -49,7 +50,8 @@ export default {
               .map(task => {
                 return {
                   ...task,
-                  projectColor: proj.color
+                  projectColor: proj.color,
+                  projectId: proj.id
                 };
               })
           ];
@@ -99,6 +101,28 @@ export default {
         };
       });
       this.$emit("reposition", "project", updatedProjects);
+    },
+    onTaskReposition(obj) {
+      // { projectId, taskId, diff, staffId, moveEnd }
+      const updatedProjects = this.projects.map(project => {
+        if (obj.projectId !== project.id) return project;
+
+        return {
+          ...project,
+          tasks: project.tasks.map(task => {
+            if (task.id !== obj.taskId) return task;
+
+            console.log(this.staff.find(({ id }) => id === obj.staffId));
+            return {
+              ...task,
+              assignee: obj.staffId,
+              start: new Date(task.start.getTime() + obj.diff),
+              end: new Date(task.end.getTime() + obj.diff)
+            };
+          })
+        };
+      });
+      this.$emit("reposition", "task", updatedProjects);
     }
   }
 };
