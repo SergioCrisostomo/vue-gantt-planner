@@ -14,7 +14,7 @@
         ></template>
       </template>
     </div>
-    <table>
+    <table data-type="tasks">
       <thead>
         <tr>
           <th>{{ staffLabel }}</th>

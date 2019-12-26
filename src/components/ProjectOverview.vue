@@ -8,10 +8,11 @@
           v-bind="project.data"
           :start="project.start"
           :end="project.end"
+          @reposition="onReposition(project, ...arguments)"
         ></project-container>
       </template>
     </div>
-    <table>
+    <table data-type="projects">
       <tr
         v-for="project in projectsAndRanges"
         :key="project.data.id"
@@ -49,8 +50,18 @@ export default {
         };
       });
     }
+  },
+  methods: {
+    onReposition(project, { col, moveEnd }) {
+      const diff = this.timeMarks.marks[col] - project.start.getTime();
+      this.$emit("project-reposition", {
+        id: project.data.id,
+        diff,
+        moveEnd
+      });
+    }
   }
 };
 </script>
 
-<style scoped></style>
+<style></style>

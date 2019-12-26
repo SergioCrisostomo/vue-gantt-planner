@@ -1,5 +1,5 @@
 <template>
-  <vue-gantt-planner v-bind="mockData" @reposition-event="onReposition">
+  <vue-gantt-planner v-bind="mockData" @reposition="onReposition">
   </vue-gantt-planner>
 </template>
 
@@ -14,7 +14,14 @@ export default {
   data() {
     return { mockData };
   },
-  methods: { onReposition() {} }
+  methods: {
+    onReposition(type, projects) {
+      this.mockData = {
+        ...this.mockData,
+        projects: projects
+      };
+    }
+  }
 };
 </script>
 

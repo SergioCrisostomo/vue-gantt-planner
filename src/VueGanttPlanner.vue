@@ -9,6 +9,7 @@
       :projects="projects"
       :timeMarks="timeMarks"
       :range-unit="rangeUnit"
+      @project-reposition="onProjectReposition"
     ></project-overview>
   </div>
 </template>
@@ -83,8 +84,21 @@ export default {
     }
   },
   methods: {
-    onRepositionEvent() {
-      this.$emit("reposition-event");
+    onProjectReposition(obj) {
+      const updatedProjects = this.projects.map(project => {
+        if (obj.id !== project.id) return project;
+        return {
+          ...project,
+          tasks: project.tasks.map(task => {
+            return {
+              ...task,
+              start: new Date(task.start.getTime() + obj.diff),
+              end: new Date(task.end.getTime() + obj.diff)
+            };
+          })
+        };
+      });
+      this.$emit("reposition", "project", updatedProjects);
     }
   }
 };
