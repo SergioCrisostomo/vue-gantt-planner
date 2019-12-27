@@ -12,16 +12,22 @@
       :range-unit="rangeUnit"
       @project-reposition="onProjectReposition"
     ></project-overview>
+    <engagement-overview
+      :tasks-per-person="tasksPerPerson"
+      :timeMarks="timeMarks"
+      :staffLabel="staffLabel"
+    ></engagement-overview>
   </div>
 </template>
 
 <script>
 import ProjectOverview from "./components/ProjectOverview";
 import TasksOverview from "./components/TasksOverview.vue";
+import EngagementOverview from "./components/EngagementOverview.vue";
 
 export default {
   name: "VueGanttPlanner",
-  components: { ProjectOverview, TasksOverview },
+  components: { EngagementOverview, ProjectOverview, TasksOverview },
   props: [
     "title",
     "startRange",
