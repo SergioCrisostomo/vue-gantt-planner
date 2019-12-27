@@ -45,7 +45,7 @@ export default {
       window.addEventListener("mouseup", this.onPointerUp);
     },
     onPointerUp(e) {
-      window.removeEventListener("mousemove", this.onPointerMove);
+      this.removeListeners();
       window.removeEventListener("mouseup", this.onPointerUp);
       if (e instanceof Event && this.lastPosition) {
         const [col, row] = JSON.parse(this.lastPosition);
@@ -72,6 +72,10 @@ export default {
         this.lastPosition = currentPosition;
         this.$emit("reposition", { col, row, moveEnd: false });
       }
+    },
+    removeListeners() {
+      window.removeEventListener("mousemove", this.onPointerMove);
+      window.removeEventListener("mouseup", this.onPointerUp);
     },
     calculateCellPositions() {
       const startPosition = this.$el.getBoundingClientRect();
@@ -114,6 +118,9 @@ export default {
   },
   mounted() {
     this.setContainerPosition();
+  },
+  beforeDestroy() {
+    this.removeListeners();
   }
 };
 </script>

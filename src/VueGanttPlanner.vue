@@ -117,8 +117,6 @@ export default {
           ...project,
           tasks: project.tasks.map(task => {
             if (task.id !== obj.taskId) return task;
-
-            console.log(this.staff.find(({ id }) => id === obj.staffId));
             return {
               ...task,
               assignee: obj.staffId,

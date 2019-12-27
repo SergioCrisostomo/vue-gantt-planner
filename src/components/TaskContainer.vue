@@ -51,8 +51,7 @@ export default {
       window.addEventListener("mouseup", this.onPointerUp);
     },
     onPointerUp(e) {
-      window.removeEventListener("mousemove", this.onPointerMove);
-      window.removeEventListener("mouseup", this.onPointerUp);
+      this.removeListeners();
       if (e instanceof Event && this.lastPosition) {
         const [col, row] = JSON.parse(this.lastPosition);
         this.$emit("reposition", { col, row, moveEnd: true });
@@ -83,6 +82,10 @@ export default {
         });
       }
     },
+    removeListeners() {
+      window.removeEventListener("mousemove", this.onPointerMove);
+      window.removeEventListener("mouseup", this.onPointerUp);
+    },
     calculateCellPositions() {
       const startPosition = this.$el.getBoundingClientRect();
       const table = document.querySelector('table[data-type="tasks"]');
@@ -97,7 +100,6 @@ export default {
         x: xSteps,
         y: ySteps
       };
-      console.log(JSON.stringify(this.tablePositions));
     },
     setContainerPosition() {
       const rowSelector = `table[data-type="tasks"] tr[data-staff="${this.staff.id}"]`;
@@ -120,10 +122,13 @@ export default {
   watch: {
     start() {
       this.setContainerPosition();
-    }
+    },
   },
   mounted() {
     this.setContainerPosition();
+  },
+  beforeDestroy() {
+    this.removeListeners();
   }
 };
 </script>
