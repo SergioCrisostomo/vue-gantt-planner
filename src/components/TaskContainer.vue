@@ -141,7 +141,7 @@ export default {
   border-radius: 3px;
   z-index: 1;
   user-select: none;
-  transition: left 0.35s;
+  transition: left 0.35s, top 0.35s;
 }
 .gantt-task-container span {
   margin-left: 5px;
