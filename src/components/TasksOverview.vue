@@ -1,5 +1,6 @@
 <template>
   <div>
+    <h2>Tasks overview</h2>
     <div>
       <template v-for="person in tasksPerPerson">
         <template v-for="(task, i) in person.tasks"

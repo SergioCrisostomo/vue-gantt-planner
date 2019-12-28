@@ -1,5 +1,5 @@
 <template>
-  <div :style="styles" class="gantt-task-container" @mousedown="onPointerDown">
+  <div :style="styles" :class="wrapperClasses" @mousedown="onPointerDown">
     <span>{{ type }}</span>
   </div>
 </template>
@@ -26,7 +26,8 @@ export default {
       width: 0,
       pointerDownOffset: { x: 0, y: 0 },
       tablePositions: [],
-      lastPosition: ""
+      lastPosition: "",
+      softenTransitions: false
     };
   },
   computed: {
@@ -38,6 +39,14 @@ export default {
         left: this.x + 2 + "px",
         top: this.y + 2 + "px"
       };
+    },
+    wrapperClasses() {
+      return [
+        "gantt-task-container",
+        {
+          "gantt-task-container-soften-transitions": this.softenTransitions
+        }
+      ];
     }
   },
   methods: {
@@ -123,9 +132,13 @@ export default {
     start() {
       this.setContainerPosition();
     },
+    staff() {
+      this.setContainerPosition();
+    }
   },
   mounted() {
     this.setContainerPosition();
+    setTimeout(() => (this.softenTransitions = true), 1000);
   },
   beforeDestroy() {
     this.removeListeners();
@@ -141,6 +154,8 @@ export default {
   border-radius: 3px;
   z-index: 1;
   user-select: none;
+}
+.gantt-task-container-soften-transitions {
   transition: left 0.35s, top 0.35s;
 }
 .gantt-task-container span {

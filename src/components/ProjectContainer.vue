@@ -1,9 +1,5 @@
 <template>
-  <div
-    :style="styles"
-    class="gantt-project-container"
-    @mousedown="onPointerDown"
-  >
+  <div :style="styles" :class="wrapperClasses" @mousedown="onPointerDown">
     <span>{{ name }}</span>
   </div>
 </template>
@@ -20,7 +16,8 @@ export default {
       width: 0,
       pointerDownOffset: { x: 0, y: 0 },
       tablePositions: [],
-      lastPosition: ""
+      lastPosition: "",
+      softenTransitions: false
     };
   },
   computed: {
@@ -32,6 +29,14 @@ export default {
         left: this.x + 2 + "px",
         top: this.y + 2 + "px"
       };
+    },
+    wrapperClasses() {
+      return [
+        "gantt-project-container",
+        {
+          "gantt-project-container-soften-transitions": this.softenTransitions
+        }
+      ];
     }
   },
   methods: {
@@ -118,6 +123,7 @@ export default {
   },
   mounted() {
     this.setContainerPosition();
+    setTimeout(() => (this.softenTransitions = true), 1000);
   },
   beforeDestroy() {
     this.removeListeners();
@@ -133,6 +139,8 @@ export default {
   border-radius: 3px;
   z-index: 1;
   user-select: none;
+}
+.gantt-project-container-soften-transitions {
   transition: left 0.35s, top 0.35s;
 }
 .gantt-project-container span {

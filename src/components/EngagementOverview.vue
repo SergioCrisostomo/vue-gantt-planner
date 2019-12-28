@@ -17,7 +17,11 @@
           :data-staff="person.id"
         >
           <th>{{ person.name }}</th>
-          <td v-for="(engagement, i) in person.engagements" :key="i">
+          <td
+            v-for="(engagement, i) in person.engagements"
+            :key="i"
+            :class="{ overloaded: engagement > 100 }"
+          >
             {{ engagement }}
           </td>
         </tr>
@@ -65,5 +69,8 @@ export default {
 <style>
 table[data-type="engagement"] td {
   text-align: center;
+}
+table[data-type="engagement"] td.overloaded {
+  color: lightcoral;
 }
 </style>
