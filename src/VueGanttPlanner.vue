@@ -4,6 +4,7 @@
       :tasks-per-person="tasksPerPerson"
       :timeMarks="timeMarks"
       :staffLabel="staffLabel"
+      :unplanned-tasks="unplannedTasks"
       @task-reposition="onTaskReposition"
     ></tasks-overview>
     <project-overview
@@ -52,12 +53,11 @@ export default {
           return [
             ...tasks,
             ...proj.tasks
-              .filter(task => task.assignee === id)
+              .filter(task => task.assignee === id && task.start && task.end)
               .map(task => {
                 return {
                   ...task,
-                  projectColor: proj.color,
-                  projectId: proj.id
+                  project: proj
                 };
               })
           ];
@@ -69,6 +69,24 @@ export default {
           tasks
         };
       });
+    },
+    unplannedTasks() {
+      return this.projects.reduce((tasks, project) => {
+        const unplannedTasks = project.tasks
+          .filter(task => {
+            return (
+              [task.assignee, task.start, task.end].filter(Boolean).length === 0
+            );
+          })
+          .map(task => {
+            return {
+              ...task,
+              project
+            };
+          });
+        if (unplannedTasks.length === 0) return tasks;
+        return [...tasks, ...unplannedTasks];
+      }, []);
     },
     timeMarks() {
       const increment = this.incrementType;

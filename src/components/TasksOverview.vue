@@ -3,8 +3,8 @@
     <h2>Tasks overview</h2>
     <div>
       <template v-for="person in tasksPerPerson">
-        <template v-for="(task, i) in person.tasks"
-          ><task-container
+        <template v-for="(task, i) in person.tasks">
+          <task-container
             v-if="task"
             :key="task.id"
             v-bind="task"
@@ -12,8 +12,8 @@
             :staff="person"
             :staff-task-index="i"
             @reposition="onReposition(task, ...arguments)"
-          ></task-container
-        ></template>
+          ></task-container>
+        </template>
       </template>
     </div>
     <table data-type="tasks">
@@ -42,6 +42,20 @@
         </tr>
       </tbody>
     </table>
+    <div>
+      <h3>Unplanned tasks</h3>
+      <div class="gantt-unplanned-tasks">
+        <task-container
+          v-for="task in unplannedTasks"
+          :key="task.id"
+          v-bind="task"
+          :mark-length="rangeUnit"
+          :staff="null"
+          :staff-task-index="0"
+          @reposition="onReposition(task, ...arguments)"
+        ></task-container>
+      </div>
+    </div>
   </div>
 </template>
 
@@ -51,7 +65,13 @@ import TaskContainer from "./TaskContainer.vue";
 export default {
   name: "TasksOverview",
   components: { TaskContainer },
-  props: ["tasksPerPerson", "timeMarks", "staffLabel", "rangeUnit"], // TODO: add types and validators
+  props: [
+    "tasksPerPerson",
+    "unplannedTasks",
+    "timeMarks",
+    "staffLabel",
+    "rangeUnit"
+  ], // TODO: add types and validators
   data() {
     return {
       dragTarget: {}
@@ -82,4 +102,10 @@ export default {
 };
 </script>
 
-<style></style>
+<style>
+.gantt-unplanned-tasks .gantt-task-container{
+  position: relative;
+  width: 60px !important;
+  height: 20px !important;
+}
+</style>

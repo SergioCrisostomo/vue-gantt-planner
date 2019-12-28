@@ -91,6 +91,21 @@ export default {
         }
       ],
       color: "#88e"
+    },
+    {
+      id: "P004",
+      name: "Unstarted",
+      tasks: [
+        {
+          id: "T007",
+          assignee: "",
+          type: PM,
+          start: null,
+          end: null,
+          engagement: 0
+        }
+      ],
+      color: "#ff7097"
     }
   ],
   title: "Vue Gantt Planner",
