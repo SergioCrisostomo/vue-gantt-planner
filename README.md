@@ -19,7 +19,6 @@ npm run serve
 
 As I wrote above this is under development. The steps I know I want to add are:
 
- - add proper types to props
  - re-arrange projects so they fits in minimal number of rows
  - automatically assignment of staff into projects
  - i18n or a prop that can set terms in different languages
