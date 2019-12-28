@@ -4,6 +4,7 @@
       :tasks-per-person="tasksPerPerson"
       :timeMarks="timeMarks"
       :staffLabel="staffLabel"
+      :unplanned-tasks="unplannedTasks"
       @task-reposition="onTaskReposition"
     ></tasks-overview>
     <project-overview
@@ -71,12 +72,11 @@ export default {
           return [
             ...tasks,
             ...proj.tasks
-              .filter(task => task.assignee === id)
+              .filter(task => task.assignee === id && task.start && task.end)
               .map(task => {
                 return {
                   ...task,
-                  projectColor: proj.color,
-                  projectId: proj.id
+                  project: proj
                 };
               })
           ];
@@ -88,6 +88,24 @@ export default {
           tasks
         };
       });
+    },
+    unplannedTasks() {
+      return this.projects.reduce((tasks, project) => {
+        const unplannedTasks = project.tasks
+          .filter(task => {
+            return (
+              [task.assignee, task.start, task.end].filter(Boolean).length === 0
+            );
+          })
+          .map(task => {
+            return {
+              ...task,
+              project
+            };
+          });
+        if (unplannedTasks.length === 0) return tasks;
+        return [...tasks, ...unplannedTasks];
+      }, []);
     },
     timeMarks() {
       const increment = this.incrementType;
@@ -128,7 +146,7 @@ export default {
       this.$emit("reposition", "project", updatedProjects);
     },
     onTaskReposition(obj) {
-      // { projectId, taskId, diff, staffId, moveEnd }
+      // { projectId, taskId, start, end, staffId, moveEnd }
       const updatedProjects = this.projects.map(project => {
         if (obj.projectId !== project.id) return project;
 
@@ -136,11 +154,12 @@ export default {
           ...project,
           tasks: project.tasks.map(task => {
             if (task.id !== obj.taskId) return task;
+            // console.log(new Date(obj.start), new Date(obj.end))
             return {
               ...task,
               assignee: obj.staffId,
-              start: new Date(task.start.getTime() + obj.diff),
-              end: new Date(task.end.getTime() + obj.diff)
+              start: new Date(obj.start),
+              end: new Date(obj.end)
             };
           })
         };
@@ -164,15 +183,15 @@ export default {
 .gantt-plan td {
   border: 1px solid black;
   height: 22px;
-  width: 60px;
+  width: 100px;
   padding: 0;
-  max-width: 60px;
+  max-width: 100px;
 }
 .gantt-plan td {
   position: relative;
 }
 .gantt-plan tr th:first-child {
   padding: 0 2px;
-  width: 100px;
+  width: 120px;
 }
 </style>

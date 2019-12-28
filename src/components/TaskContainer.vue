@@ -26,8 +26,8 @@ export default {
     staffTaskIndex: {
       type: Number
     },
-    projectColor: {
-      type: String
+    project: {
+      type: Object
     },
     start: {
       type: Date
@@ -53,7 +53,7 @@ export default {
       return {
         width: this.width + "px",
         height: this.height + "px",
-        backgroundColor: this.projectColor,
+        backgroundColor: this.project.color,
         left: this.x + 2 + "px",
         top: this.y + 2 + "px"
       };
@@ -129,21 +129,23 @@ export default {
       };
     },
     setContainerPosition() {
-      const rowSelector = `table[data-type="tasks"] tr[data-staff="${this.staff.id}"]`;
-      const row = document.querySelectorAll(rowSelector)[this.staffTaskIndex];
-      const startTd = row.querySelector(
-        `td[data-time-mark="${this.start.getTime()}"]`
-      );
-      const endTd = row.querySelector(
-        `td[data-time-mark="${this.end.getTime()}"]`
-      );
+      if (this.staff) {
+        const rowSelector = `table[data-type="tasks"] tr[data-staff="${this.staff.id}"]`;
+        const row = document.querySelectorAll(rowSelector)[this.staffTaskIndex];
+        const startTd = row.querySelector(
+          `td[data-time-mark="${this.start.getTime()}"]`
+        );
+        const endTd = row.querySelector(
+          `td[data-time-mark="${this.end.getTime()}"]`
+        );
 
-      const startCoords = startTd.getBoundingClientRect();
-      const endCoords = endTd.getBoundingClientRect();
-      this.x = startCoords.x;
-      this.y = startCoords.y;
-      this.height = startCoords.height - 3;
-      this.width = endCoords.width + endCoords.x - startCoords.x - 3;
+        const startCoords = startTd.getBoundingClientRect();
+        const endCoords = endTd.getBoundingClientRect();
+        this.x = startCoords.x;
+        this.y = startCoords.y;
+        this.height = startCoords.height - 3;
+        this.width = endCoords.width + endCoords.x - startCoords.x - 3;
+      }
     }
   },
   watch: {
