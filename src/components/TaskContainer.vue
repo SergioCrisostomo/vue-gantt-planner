@@ -7,17 +7,35 @@
 <script>
 export default {
   name: "TaskContainer",
-  props: [
-    "id",
-    "type",
-    "start",
-    "end",
-    "assignees",
-    "markLength",
-    "project",
-    "staff",
-    "staffTaskIndex"
-  ], // TODO: add types
+  props: {
+    id: {
+      type: String
+    },
+    type: {
+      type: String
+    },
+    assignees: {
+      type: Array
+    },
+    markLength: {
+      type: String
+    },
+    staff: {
+      type: Object
+    },
+    staffTaskIndex: {
+      type: Number
+    },
+    project: {
+      type: Object
+    },
+    start: {
+      type: Date
+    },
+    end: {
+      type: Date
+    }
+  },
   data() {
     return {
       x: 2,

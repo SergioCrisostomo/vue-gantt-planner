@@ -33,7 +33,18 @@
 <script>
 export default {
   name: "EngagementOverview",
-  props: ["tasksPerPerson", "timeMarks", "staffLabel"], // TODO: add types and validators
+  props: {
+    tasksPerPerson: {
+      type: Array
+    },
+    timeMarks: {
+      type: Object
+    },
+    staffLabel: {
+      type: String,
+      required: true
+    }
+  },
 
   computed: {
     engagementPerPerson() {
