@@ -34,7 +34,18 @@ import ProjectContainer from "./ProjectContainer";
 export default {
   name: "ProjectOverview",
   components: { ProjectContainer },
-  props: ["projects", "timeMarks", "rangeUnit"],
+  props: {
+    projects: {
+      type: Array
+    },
+    timeMarks: {
+      type: Object
+    },
+    rangeUnit: {
+      type: String,
+      required: true
+    }
+  },
   computed: {
     projectsAndRanges() {
       return this.projects.map(proj => {

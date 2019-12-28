@@ -28,15 +28,34 @@ import EngagementOverview from "./components/EngagementOverview.vue";
 export default {
   name: "VueGanttPlanner",
   components: { EngagementOverview, ProjectOverview, TasksOverview },
-  props: [
-    "title",
-    "startRange",
-    "endRange",
-    "rangeUnit",
-    "staffLabel",
-    "staff",
-    "projects"
-  ], // TODO: add types and validators
+  props: {
+    title: {
+      type: String,
+      default: "Vue Gantt Planner"
+    },
+    startRange: {
+      type: Date
+    },
+    endRange: {
+      type: Date
+    },
+    rangeUnit: {
+      type: String,
+      validator: function(value) {
+        return ["day", "week", "month"].indexOf(value) !== -1;
+      }
+    },
+    staffLabel: {
+      type: String,
+      default: "Staff"
+    },
+    staff: {
+      type: Array
+    },
+    projects: {
+      type: Array
+    }
+  },
   data() {
     return {
       projectIssues: [],
