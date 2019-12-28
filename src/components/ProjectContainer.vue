@@ -7,7 +7,26 @@
 <script>
 export default {
   name: "ProjectContainer",
-  props: ["id", "name", "markLength", "color", "start", "end"], // TODO: add types
+  props: {
+    id: {
+      type: String
+    },
+    name: {
+      type: String
+    },
+    markLength: {
+      type: String
+    },
+    color: {
+      type: String
+    },
+    start: {
+      type: Date
+    },
+    end: {
+      type: Date
+    }
+  },
   data() {
     return {
       x: 0,
