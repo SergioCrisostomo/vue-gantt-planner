@@ -80,13 +80,19 @@ export default {
   computed: {},
   methods: {
     onReposition(task, { col, row, moveEnd }) {
-      const timeDiff = this.timeMarks.marks[col] - task.start.getTime();
+      const [start, end] = [task.end, task.start].map(date =>
+        date ? date.getTime() : 0
+      );
+      const timeDiff = Math.abs(end - start);
+      const staff = this.tasksPerPerson[row];
+      if (!staff) return;
 
       this.$emit("task-reposition", {
-        projectId: task.projectId,
+        projectId: task.project.id,
         taskId: task.id,
-        diff: timeDiff,
-        staffId: this.tasksPerPerson[row].id,
+        start: this.timeMarks.marks[col],
+        end: this.timeMarks.marks[col] + timeDiff,
+        staffId: staff.id,
         moveEnd
       });
     }
@@ -103,7 +109,7 @@ export default {
 </script>
 
 <style>
-.gantt-unplanned-tasks .gantt-task-container{
+.gantt-unplanned-tasks .gantt-task-container {
   position: relative;
   width: 60px !important;
   height: 20px !important;
