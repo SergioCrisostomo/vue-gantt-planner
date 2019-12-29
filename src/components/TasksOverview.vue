@@ -15,6 +15,15 @@
           ></task-container>
         </template>
       </template>
+      <task-container
+        v-for="(task, i) in unplannedTasks"
+        :key="task.id"
+        v-bind="task"
+        :mark-length="rangeUnit"
+        :staff="null"
+        :staff-task-index="i"
+        @reposition="onReposition(task, ...arguments)"
+      ></task-container>
     </div>
     <table data-type="tasks">
       <thead>
@@ -45,15 +54,7 @@
     <div>
       <h3>Unplanned tasks</h3>
       <div class="gantt-unplanned-tasks">
-        <task-container
-          v-for="task in unplannedTasks"
-          :key="task.id"
-          v-bind="task"
-          :mark-length="rangeUnit"
-          :staff="null"
-          :staff-task-index="0"
-          @reposition="onReposition(task, ...arguments)"
-        ></task-container>
+        <!-- unplanned tasks will be placed here... -->
       </div>
     </div>
   </div>
@@ -109,9 +110,9 @@ export default {
 </script>
 
 <style>
-.gantt-unplanned-tasks .gantt-task-container {
+.gantt-unplanned-tasks {
   position: relative;
-  width: 60px !important;
-  height: 20px !important;
+  width: 100%;
+  height: 20px;
 }
 </style>

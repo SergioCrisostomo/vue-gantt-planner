@@ -145,6 +145,17 @@ export default {
         this.y = startCoords.y;
         this.height = startCoords.height - 3;
         this.width = endCoords.width + endCoords.x - startCoords.x - 3;
+      } else {
+        const placeholder = document.querySelector(".gantt-unplanned-tasks");
+        const placeholderCoordinates = placeholder.getBoundingClientRect();
+        const referenceTd = document
+          .querySelector('table[data-type="tasks"] td')
+          .getBoundingClientRect();
+        this.height = referenceTd.height;
+        this.width = referenceTd.width;
+        this.x =
+          placeholderCoordinates.x + referenceTd.width * this.staffTaskIndex;
+        this.y = placeholderCoordinates.y;
       }
     }
   },
