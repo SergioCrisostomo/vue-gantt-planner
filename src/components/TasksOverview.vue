@@ -88,7 +88,15 @@ export default {
         .map(stringToDate)
         .map(date => (date ? date.getTime() : 0));
       const timeDiff = Math.abs(end - start);
-      const staff = this.tasksPerPerson[row];
+      const staff = (() => {
+        let allRows = 0;
+        for (let j = 0, persons = this.tasksPerPerson; j < persons.length;j++){
+          for (let x = 0, tasks = persons[j].tasks; x < tasks.length; x++){
+            if (allRows === row) return persons[j];
+            allRows++;
+          }
+        }
+      })();
       if (!staff) return;
       this.$emit("task-reposition", {
         projectId: task.project.id,
