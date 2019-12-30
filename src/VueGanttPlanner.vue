@@ -176,6 +176,14 @@ export default {
   border-collapse: collapse;
   border: 1px solid black;
   table-layout: fixed;
+  width: 100%;
+  margin-bottom: 1rem;
+  color: #212529;
+}
+.gantt-plan table thead th {
+  color: #fff;
+  background-color: #343a40;
+  border-color: #454d55;
 }
 .gantt-plan td.is-drag-target {
   background-color: #b2c9ee;
@@ -185,14 +193,24 @@ export default {
   border: 1px solid black;
   height: 22px;
   width: 100px;
-  padding: 0;
   max-width: 100px;
+  padding: 0.5rem;
 }
 .gantt-plan td {
   position: relative;
+  vertical-align: top;
+  border-top: 1px solid #dee2e6;
 }
 .gantt-plan tr th:first-child {
   padding: 0 2px;
   width: 120px;
+}
+.gantt-task-container {
+  display: table;
+}
+.gantt-task-container span {
+  display: table-cell;
+  vertical-align: middle;
+  padding-left: 10px;
 }
 </style>

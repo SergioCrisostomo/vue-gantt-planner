@@ -119,5 +119,6 @@ export default {
   position: relative;
   width: 100%;
   height: 20px;
+  padding: 0.5rem;
 }
 </style>
