@@ -92,10 +92,11 @@ export default {
         y: e.clientY - this.pointerDownOffset.y
       };
       // calculate nearest cell
+      const fatFingerMargin = 10;
       const [col, row] = ["x", "y"].map(type => {
         let pos = Math.min(...this.tablePositions[type]);
         for (let value of this.tablePositions[type]) {
-          if (value < pointerCoords[type] - 10) pos = value;
+          if (value < pointerCoords[type] + fatFingerMargin) pos = value;
         }
         return this.tablePositions[type].indexOf(pos);
       });
