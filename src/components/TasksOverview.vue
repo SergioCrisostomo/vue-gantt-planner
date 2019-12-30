@@ -62,6 +62,8 @@
 
 <script>
 import TaskContainer from "./TaskContainer.vue";
+import stringToDate from "../assets/stringToDate";
+import dateToString from "../assets/dateToString";
 
 export default {
   name: "TasksOverview",
@@ -81,28 +83,31 @@ export default {
   computed: {},
   methods: {
     onReposition(task, { col, row, moveEnd }) {
-      const [start, end] = [task.end, task.start].map(date =>
-        date ? date.getTime() : 0
-      );
+      const [start, end] = [task.end, task.start]
+        .map(dateToString)
+        .map(stringToDate)
+        .map(date => (date ? date.getTime() : 0));
       const timeDiff = Math.abs(end - start);
       const staff = this.tasksPerPerson[row];
       if (!staff) return;
-
       this.$emit("task-reposition", {
         projectId: task.project.id,
         taskId: task.id,
-        start: this.timeMarks.marks[col],
-        end: this.timeMarks.marks[col] + timeDiff,
+        start: stringToDate(this.timeMarks.marks[col]),
+        end: new Date(
+          stringToDate(this.timeMarks.marks[col]).getTime() + timeDiff
+        ),
         staffId: staff.id,
         moveEnd
       });
     }
   },
   filters: {
-    formatDate(date) {
-      if (typeof date === "number") date = new Date(date);
-      return [date.getDate(), date.getMonth() + 1]
-        .map(nr => (nr > 9 ? nr : "0" + nr))
+    formatDate(str) {
+      return str
+        .slice(-5)
+        .split("-")
+        .reverse()
         .join("/");
     }
   }

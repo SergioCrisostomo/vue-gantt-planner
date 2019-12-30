@@ -67,10 +67,11 @@ export default {
     }
   },
   filters: {
-    formatDate(date) {
-      if (typeof date === "number") date = new Date(date);
-      return [date.getDate(), date.getMonth() + 1]
-        .map(nr => (nr > 9 ? nr : "0" + nr))
+    formatDate(str) {
+      return str
+        .slice(-5)
+        .split("-")
+        .reverse()
         .join("/");
     }
   }

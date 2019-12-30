@@ -31,6 +31,8 @@
 
 <script>
 import ProjectContainer from "./ProjectContainer";
+import stringToDate from "../assets/stringToDate";
+import dateToString from "../assets/dateToString";
 export default {
   name: "ProjectOverview",
   components: { ProjectContainer },
@@ -67,7 +69,9 @@ export default {
   },
   methods: {
     onReposition(project, { col, moveEnd }) {
-      const diff = this.timeMarks.marks[col] - project.start.getTime();
+      const newStartDate = stringToDate(this.timeMarks.marks[col]);
+      const oldStartDate = stringToDate(dateToString(project.start));
+      const diff = newStartDate.getTime() - oldStartDate.getTime();
       this.$emit("project-reposition", {
         id: project.data.id,
         diff,

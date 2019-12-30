@@ -25,6 +25,7 @@
 import ProjectOverview from "./components/ProjectOverview";
 import TasksOverview from "./components/TasksOverview.vue";
 import EngagementOverview from "./components/EngagementOverview.vue";
+import dateToString from "./assets/dateToString";
 
 export default {
   name: "VueGanttPlanner",
@@ -116,7 +117,7 @@ export default {
           const end = this.endRange.getTime();
           const marks = [];
           while (start.getTime() < end) {
-            marks.push(start.getTime());
+            marks.push(dateToString(start));
             if (this.rangeUnit === "day") {
               start.setDate(start.getDate() + 1);
             }
@@ -154,12 +155,12 @@ export default {
           ...project,
           tasks: project.tasks.map(task => {
             if (task.id !== obj.taskId) return task;
-            // console.log(new Date(obj.start), new Date(obj.end))
+
             return {
               ...task,
               assignee: obj.staffId,
-              start: new Date(obj.start),
-              end: new Date(obj.end)
+              start: obj.start,
+              end: obj.end
             };
           })
         };

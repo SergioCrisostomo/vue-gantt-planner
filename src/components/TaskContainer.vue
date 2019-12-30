@@ -5,6 +5,7 @@
 </template>
 
 <script>
+import dateToString from "../assets/dateToString";
 export default {
   name: "TaskContainer",
   props: {
@@ -132,11 +133,12 @@ export default {
       if (this.staff) {
         const rowSelector = `table[data-type="tasks"] tr[data-staff="${this.staff.id}"]`;
         const row = document.querySelectorAll(rowSelector)[this.staffTaskIndex];
+
         const startTd = row.querySelector(
-          `td[data-time-mark="${this.start.getTime()}"]`
+          `td[data-time-mark="${dateToString(this.start)}"]`
         );
         const endTd = row.querySelector(
-          `td[data-time-mark="${this.end.getTime()}"]`
+          `td[data-time-mark="${dateToString(this.end)}"]`
         );
 
         const startCoords = startTd.getBoundingClientRect();
